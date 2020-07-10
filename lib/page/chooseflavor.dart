@@ -14,7 +14,6 @@ class _FlavorState extends State<Flavor> {
     'ដូង',
     'ត្រាវ',
     'ស្លឹកតយ',
-
     'សុកូលា',
     'កាហ្វេ',
     'វ៉ាន់នីឡា',

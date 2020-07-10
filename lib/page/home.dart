@@ -7,6 +7,7 @@ import 'package:image_picker_modern/image_picker_modern.dart';
 import 'package:thecake_createorder/page/choosecolor.dart';
 import 'package:thecake_createorder/page/chooseflavor.dart';
 import 'package:thecake_createorder/page/chooseprice.dart';
+import 'package:thecake_createorder/page/chooseshape.dart';
 
 //Creat Order
 class MainHomePage extends StatefulWidget {
@@ -24,12 +25,14 @@ class _MainHomePageState extends State<MainHomePage>
       _image.add(File(pickedFile.path));
     });
   }
- Future getFromGallery() async{
-   final pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-   setState(() {
-     _image.add(File(pickedFile.path));
-   });
- }
+
+  Future getFromGallery() async {
+    final pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image.add(File(pickedFile.path));
+    });
+  }
+
   String _searchText = "";
   TextEditingController _searchController;
 
@@ -52,7 +55,7 @@ class _MainHomePageState extends State<MainHomePage>
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
-        child: Icon(Icons.image                                                                                                              ),
+        child: Icon(Icons.image),
         onPressed: getFromGallery,
       ),
       body: CustomScrollView(
@@ -95,7 +98,7 @@ class _MainHomePageState extends State<MainHomePage>
                   padding: EdgeInsets.all(10),
                   height: size.height * 0.2,
                   child: ListView.builder(
-                      itemCount: _image.length+1,
+                      itemCount: _image.length + 1,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (_, index) {
                         return index == 0
@@ -122,18 +125,20 @@ class _MainHomePageState extends State<MainHomePage>
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: GestureDetector(
-                                  onLongPress: (){
+                                  onLongPress: () {
                                     setState(() {
-                                      _image.removeAt(index -1);
+                                      _image.removeAt(index - 1);
                                     });
                                   },
                                   child: Container(
                                     width: 100,
                                     decoration: BoxDecoration(
-                                        image: DecorationImage(fit: BoxFit.cover,
-                                            image:
-                                                AssetImage(_image[index -1].path)),
-                                        borderRadius: BorderRadius.circular(20)),
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                _image[index - 1].path)),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
                                   ),
                                 ),
                               );
@@ -233,7 +238,7 @@ class _MainHomePageState extends State<MainHomePage>
                         padding: const EdgeInsets.only(right: 10),
                         child: Container(
                           width: size.width * 0.5,
-                          height: 55,
+                          height: size.height * 0.08,
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
@@ -290,10 +295,10 @@ class _MainHomePageState extends State<MainHomePage>
                   ),
                   Container(
                     width: size.width,
-                    height: size.height * 0.3,
+                    height: size.height *0.3,
                     child: TextField(
-                      minLines: 10,
                       maxLines: 15,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           hintText: 'បន្ថែមពត៍មាននៅទីនេះ .....',
                           border: OutlineInputBorder(
@@ -372,6 +377,7 @@ class _MainHomePageState extends State<MainHomePage>
                           child: ChooseColor(),
                         ),
                         Container(
+                          child: ChooseShape(),
                           decoration: BoxDecoration(
                               color: Colors.blue.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(5.0)),
