@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ChooseColor extends StatefulWidget {
   @override
@@ -34,50 +35,62 @@ class _ChooseColorState extends State<ChooseColor> {
     Colors.teal,
     Colors.purpleAccent
   ];
-
+  bool checkcolor = false;
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
-    return CupertinoPageScaffold(
-      backgroundColor: Colors.transparent,
-      child: Container(
-        height: size.height,
-        child: CupertinoPicker(
-          diameterRatio: 1.0,
-          magnification: 1.1,
-          itemExtent: 40,
-          onSelectedItemChanged: (int index) {
-            print(index);
+    // ignore: missing_required_param
+    return ListView.builder(itemCount: 7,scrollDirection: Axis.horizontal,itemBuilder: (_, int index){
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+        child: InkWell(
+          onTap: (){
+            setState(() {
+              checkcolor = !checkcolor;
+            });
           },
-          children: List.generate(namecolor.length, (index) {
-            return Container(
-              height: 30,
-              width: size.width * 0.3,
+          child: Container(
+            width: size.width * 0.35,
+            height: size.height * 0.3,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.0),
+              boxShadow: [
+                BoxShadow(
+                    spreadRadius: 1,
+                    color: CupertinoColors.black.withOpacity(0.5),
+                    blurRadius: 3.0,
+                    offset: Offset(0.0, 2.0))
+              ],
+              gradient: LinearGradient(colors: [
+                Color(0xffc31432),
+                Color(0xff240b36),
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      color: Colors.white.withOpacity(0.7),
-                      child: Center(child: Text(namecolorE[index],style: TextStyle(color: widgetcolors[index]),)),
-                    ),
-                  ),
+                //mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   Text(
                     namecolor[index],
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  )
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  checkcolor == true
+                      ? Icon(Icons.check_box ,color: Colors.orangeAccent,)
+                      : Icon(Icons.check_box_outline_blank, color: Colors.white,)
                 ],
               ),
-              decoration: BoxDecoration(
-                  color: widgetcolors[index],
-                  borderRadius: BorderRadius.circular(10.0)),
-            );
-          }),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

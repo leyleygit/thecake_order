@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker_modern/image_picker_modern.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:thecake_createorder/page/choosecolor.dart';
 import 'package:thecake_createorder/page/chooseflavor.dart';
 import 'package:thecake_createorder/page/chooseprice.dart';
@@ -17,21 +17,17 @@ class MainHomePage extends StatefulWidget {
 
 class _MainHomePageState extends State<MainHomePage>
     with TickerProviderStateMixin {
-  List<File> _image = [];
+  File _image;
+  final picker = ImagePicker();
 
   Future getImage() async {
-    final pickedFile = await ImagePicker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
     setState(() {
-      _image.add(File(pickedFile.path));
+      _image = File(pickedFile.path);
     });
   }
 
-  Future getFromGallery() async {
-    final pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image.add(File(pickedFile.path));
-    });
-  }
 
   String _searchText = "";
   TextEditingController _searchController;
@@ -53,11 +49,6 @@ class _MainHomePageState extends State<MainHomePage>
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        child: Icon(Icons.image),
-        onPressed: getFromGallery,
-      ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -98,7 +89,7 @@ class _MainHomePageState extends State<MainHomePage>
                   padding: EdgeInsets.all(10),
                   height: size.height * 0.2,
                   child: ListView.builder(
-                      itemCount: _image.length + 1,
+                      itemCount: 1,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (_, index) {
                         return index == 0
@@ -127,7 +118,7 @@ class _MainHomePageState extends State<MainHomePage>
                                 child: GestureDetector(
                                   onLongPress: () {
                                     setState(() {
-                                      _image.removeAt(index - 1);
+
                                     });
                                   },
                                   child: Container(
@@ -135,8 +126,7 @@ class _MainHomePageState extends State<MainHomePage>
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: AssetImage(
-                                                _image[index - 1].path)),
+                                            ),
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                   ),
