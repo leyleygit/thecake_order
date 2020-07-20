@@ -28,7 +28,6 @@ class _MainHomePageState extends State<MainHomePage>
     });
   }
 
-
   String _searchText = "";
   TextEditingController _searchController;
 
@@ -117,16 +116,14 @@ class _MainHomePageState extends State<MainHomePage>
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: GestureDetector(
                                   onLongPress: () {
-                                    setState(() {
-
-                                    });
+                                    setState(() {});
                                   },
                                   child: Container(
                                     width: 100,
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            ),
+                                          fit: BoxFit.cover,
+                                        ),
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                   ),
@@ -285,7 +282,7 @@ class _MainHomePageState extends State<MainHomePage>
                   ),
                   Container(
                     width: size.width,
-                    height: size.height *0.3,
+                    height: size.height * 0.3,
                     child: TextField(
                       maxLines: 15,
                       keyboardType: TextInputType.text,
