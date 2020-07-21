@@ -17,7 +17,6 @@ class _ChooseShapeState extends State<ChooseShape> {
   ];
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       // ignore: missing_required_param
       backgroundColor: Colors.transparent,

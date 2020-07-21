@@ -9,7 +9,7 @@ import 'package:thecake_createorder/page/chooseflavor.dart';
 import 'package:thecake_createorder/page/chooseprice.dart';
 import 'package:thecake_createorder/page/chooseshape.dart';
 
-//Creat Order
+//Create Order
 class MainHomePage extends StatefulWidget {
   @override
   _MainHomePageState createState() => _MainHomePageState();
@@ -17,20 +17,22 @@ class MainHomePage extends StatefulWidget {
 
 class _MainHomePageState extends State<MainHomePage>
     with TickerProviderStateMixin {
-  File _image;
+  List<File> _image;
   final picker = ImagePicker();
-
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      _image = File(pickedFile.path);
-    });
-  }
 
   String _searchText = "";
   TextEditingController _searchController;
-
+  List<String> moneys = [
+    'Choose Price',
+    '5 \$',
+    '10 \$',
+    '15 \$',
+    '20 \$',
+    '25 \$',
+    '30 \$',
+    '35 \$',
+    '40 \$'
+  ];
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Color'),
     Tab(text: 'Shape'),
@@ -39,10 +41,29 @@ class _MainHomePageState extends State<MainHomePage>
   TabController _tabbarcontroller;
   @override
   void initState() {
+    _image = [];
     _tabbarcontroller = TabController(vsync: this, length: 3);
     super.initState();
   }
 
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      _image.add(File(pickedFile.path));
+    });
+  }
+
+  Future getImageGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image.add(File(pickedFile.path));
+    });
+  }
+
+  int curIndex = 0;
+  bool tapped = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -88,7 +109,7 @@ class _MainHomePageState extends State<MainHomePage>
                   padding: EdgeInsets.all(10),
                   height: size.height * 0.2,
                   child: ListView.builder(
-                      itemCount: 1,
+                      itemCount: _image.length + 1,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (_, index) {
                         return index == 0
@@ -116,12 +137,16 @@ class _MainHomePageState extends State<MainHomePage>
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: GestureDetector(
                                   onLongPress: () {
-                                    setState(() {});
+                                    setState(() {
+                                      _image.removeAt(index - 1);
+                                    });
                                   },
                                   child: Container(
                                     width: 100,
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
+                                          image: AssetImage(
+                                              _image[index - 1].path),
                                           fit: BoxFit.cover,
                                         ),
                                         borderRadius:
@@ -161,18 +186,21 @@ class _MainHomePageState extends State<MainHomePage>
                             height: size.height * 0.06,
                             child: Center(
                                 child: Text(
-                              "Choose Price",
+                              " ${moneys[curIndex]}",
                               style: GoogleFonts.kronaOne(color: Colors.white),
                             )),
                           ),
-                          onTap: () {
-                            showCupertinoModalPopup(
+                          onTap: () async {
+                            await showCupertinoModalPopup(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return CupertinoActionSheet(
                                     actions: <Widget>[
                                       CupertinoActionSheetAction(
                                         onPressed: () {
+                                          setState(() {
+                                            tapped = true;
+                                          });
                                           Navigator.pop(context);
                                         },
                                         child: Text("យល់ព្រម"),
@@ -185,14 +213,33 @@ class _MainHomePageState extends State<MainHomePage>
                                     ),
                                     message: Container(
                                       width: size.width,
-                                      height: size.height * 0.1,
-                                      child: ChoosePrice(),
+                                      height: size.height * 0.3,
+                                      child: CupertinoPicker(
+                                          itemExtent: 50,
+                                          onSelectedItemChanged: (int index) {
+                                            setState(() {
+                                              curIndex = index;
+                                            });
+                                          },
+                                          children: List.generate(moneys.length,
+                                              (index) {
+                                            return Center(
+                                              child: Text(
+                                                moneys[index],
+                                                style: TextStyle(
+                                                    color: Colors.orange),
+                                              ),
+                                            );
+                                          })),
                                     ),
                                     cancelButton: CupertinoActionSheetAction(
                                       isDefaultAction: true,
                                       isDestructiveAction: true,
                                       child: Text('បដិសេដ'),
                                       onPressed: () {
+                                        setState(() {
+                                          curIndex = 0;
+                                        });
                                         Navigator.pop(context);
                                       },
                                     ),
@@ -377,6 +424,16 @@ class _MainHomePageState extends State<MainHomePage>
             ),
           )),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            getImageGallery();
+          });
+        },
+        backgroundColor: Colors.orange,
+        child: Icon(Icons.camera_enhance),
       ),
     );
   }

@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChoosePrice extends StatefulWidget {
+
   @override
   _ChoosePriceState createState() => _ChoosePriceState();
 }
 
 class _ChoosePriceState extends State<ChoosePrice> {
   List<String> moneys = [
+    '',
     '5 \$',
     '10 \$',
     '15 \$',

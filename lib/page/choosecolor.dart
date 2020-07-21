@@ -39,8 +39,6 @@ class _ChooseColorState extends State<ChooseColor> {
   bool checkcolor = false;
   @override
   Widget build(BuildContext context) {
-
-    Size size = MediaQuery.of(context).size;
     // ignore: missing_required_param
     return ListView.builder(itemCount: namecolor.length,scrollDirection: Axis.horizontal,itemBuilder: (_, int index){
       return ColorItem(namecolor: namecolor[index],);
